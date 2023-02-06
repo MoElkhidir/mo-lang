@@ -50,7 +50,7 @@ public class MoLang {
     }
   }
 
-  static void error(int line, String message) {
+  public static void error(int line, String message) {
     report(line, "", message);
   }
   private static void report(int line, String where,
