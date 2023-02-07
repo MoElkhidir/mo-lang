@@ -1,13 +1,13 @@
 # Welcome to `mo-lang`
-**Disclaimer:** The language is still in early phase of development.
+**Disclaimer:** The language is still in an early phase of development.
 
 **Current features:**
-1. Source code scanning and token generation.
+1. Source-code scanning and token generation.
 
 
 ## How to run your first program:
-Goes without saying given the list of features above, your first program is not even executable. 
-Nonetheless, it is still fun to run something made by another human!
+Goes without saying that given the list of feature(s) above, your first program is not even executable. 
+Nonetheless, it is still fun to run the scanner and see what it does!
 
 1. Package the source code
 

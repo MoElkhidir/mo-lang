@@ -1,2 +1,2 @@
-string name = "mo"
-number height = 1843
+var name = "mo"
+var height = 1843
