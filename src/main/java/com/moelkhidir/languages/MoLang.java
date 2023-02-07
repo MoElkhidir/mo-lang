@@ -1,5 +1,6 @@
 package com.moelkhidir.languages;
 
+import com.moelkhidir.languages.core.Scanner;
 import com.moelkhidir.languages.core.Token;
 import java.io.BufferedReader;
 import java.io.IOException;
