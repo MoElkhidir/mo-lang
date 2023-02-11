@@ -1,11 +1,9 @@
-package com.moelkhidir.languages.core.parser;
+package com.moelkhidir.languages.core;
 
-import com.moelkhidir.languages.core.Token;
-import com.moelkhidir.languages.core.TokenType;
-import com.moelkhidir.languages.core.parser.Expr.Binary;
-import com.moelkhidir.languages.core.parser.Expr.Grouping;
-import com.moelkhidir.languages.core.parser.Expr.Literal;
-import com.moelkhidir.languages.core.parser.Expr.Unary;
+import com.moelkhidir.languages.core.Expr.Binary;
+import com.moelkhidir.languages.core.Expr.Grouping;
+import com.moelkhidir.languages.core.Expr.Literal;
+import com.moelkhidir.languages.core.Expr.Unary;
 
 public class SyntaxTreePrinter implements Expr.Visitor<String> {
 

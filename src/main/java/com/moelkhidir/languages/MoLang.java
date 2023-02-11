@@ -1,14 +1,12 @@
 package com.moelkhidir.languages;
 
-import com.moelkhidir.languages.core.Exceptions.RuntimeError;
-import com.moelkhidir.languages.core.Interpreter.Interpreter;
+import com.moelkhidir.languages.core.RuntimeError;
+import com.moelkhidir.languages.core.Interpreter;
 import com.moelkhidir.languages.core.Scanner;
 import com.moelkhidir.languages.core.Token;
 import com.moelkhidir.languages.core.TokenType;
-import com.moelkhidir.languages.core.parser.Expr;
-import com.moelkhidir.languages.core.parser.Parser;
-import com.moelkhidir.languages.core.parser.Stmt;
-import com.moelkhidir.languages.core.parser.SyntaxTreePrinter;
+import com.moelkhidir.languages.core.Parser;
+import com.moelkhidir.languages.core.Stmt;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

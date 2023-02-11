@@ -1,10 +1,8 @@
-package com.moelkhidir.languages.core.parser;
+package com.moelkhidir.languages.core;
 
 import static com.moelkhidir.languages.core.TokenType.*;
 
 import com.moelkhidir.languages.MoLang;
-import com.moelkhidir.languages.core.Token;
-import com.moelkhidir.languages.core.TokenType;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.moelkhidir.languages.core.Exceptions;
+package com.moelkhidir.languages.core;
 
 import com.moelkhidir.languages.core.Token;
 

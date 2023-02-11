@@ -1,18 +1,12 @@
-package com.moelkhidir.languages.core.Interpreter;
-
-import static com.moelkhidir.languages.core.TokenType.*;
+package com.moelkhidir.languages.core;
 
 import com.moelkhidir.languages.MoLang;
-import com.moelkhidir.languages.core.Exceptions.RuntimeError;
-import com.moelkhidir.languages.core.Token;
-import com.moelkhidir.languages.core.parser.Expr;
-import com.moelkhidir.languages.core.parser.Expr.Binary;
-import com.moelkhidir.languages.core.parser.Expr.Grouping;
-import com.moelkhidir.languages.core.parser.Expr.Literal;
-import com.moelkhidir.languages.core.parser.Expr.Unary;
-import com.moelkhidir.languages.core.parser.Stmt;
-import com.moelkhidir.languages.core.parser.Stmt.Expression;
-import com.moelkhidir.languages.core.parser.Stmt.Print;
+import com.moelkhidir.languages.core.Expr.Binary;
+import com.moelkhidir.languages.core.Expr.Grouping;
+import com.moelkhidir.languages.core.Expr.Literal;
+import com.moelkhidir.languages.core.Expr.Unary;
+import com.moelkhidir.languages.core.Stmt.Expression;
+import com.moelkhidir.languages.core.Stmt.Print;
 import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {

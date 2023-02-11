@@ -1,7 +1,4 @@
-package com.moelkhidir.languages.core.parser;
-
-import com.moelkhidir.languages.core.Token;
-import java.util.List;
+package com.moelkhidir.languages.core;
 
 public abstract class Expr {
   public interface Visitor<R> {
