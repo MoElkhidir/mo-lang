@@ -1,5 +1,7 @@
 package com.moelkhidir.languages.core.Interpreter;
 
+import static com.moelkhidir.languages.core.TokenType.*;
+
 import com.moelkhidir.languages.MoLang;
 import com.moelkhidir.languages.core.Exceptions.RuntimeError;
 import com.moelkhidir.languages.core.Token;
@@ -8,20 +10,31 @@ import com.moelkhidir.languages.core.parser.Expr.Binary;
 import com.moelkhidir.languages.core.parser.Expr.Grouping;
 import com.moelkhidir.languages.core.parser.Expr.Literal;
 import com.moelkhidir.languages.core.parser.Expr.Unary;
+import com.moelkhidir.languages.core.parser.Stmt;
+import com.moelkhidir.languages.core.parser.Stmt.Expression;
+import com.moelkhidir.languages.core.parser.Stmt.Print;
+import java.util.List;
 
-public class Interpreter implements Expr.Visitor<Object> {
+public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
-  public void interpret(Expr expression) {
+  public  void interpret(List<Stmt> statements) {
     try {
-      Object value = evaluate(expression);
-      System.out.println(stringify(value));
+      for (Stmt statement : statements) {
+        execute(statement);
+      }
     } catch (RuntimeError error) {
       MoLang.runtimeError(error);
     }
   }
 
+  private void execute(Stmt stmt) {
+    stmt.accept(this);
+  }
+
   private String stringify(Object object) {
-    if (object == null) return "nil";
+    if (object == null) {
+      return "nil";
+    }
     if (object instanceof Double) {
       String text = object.toString();
       if (text.endsWith(".0")) {
@@ -33,7 +46,7 @@ public class Interpreter implements Expr.Visitor<Object> {
   }
 
   @Override
-  public Object visitBinaryExpression(Binary expr) {
+  public Object visitBinaryExpr(Binary expr) {
     Object left = evaluate(expr.left);
     Object right = evaluate(expr.right);
     switch (expr.operator.type) {
@@ -77,17 +90,17 @@ public class Interpreter implements Expr.Visitor<Object> {
   }
 
   @Override
-  public Object visitGroupingExpression(Grouping expr) {
+  public Object visitGroupingExpr(Grouping expr) {
     return evaluate(expr.expr);
   }
 
   @Override
-  public Object visitLiteralExpression(Literal expr) {
+  public Object visitLiteralExpr(Literal expr) {
     return expr.value;
   }
 
   @Override
-  public Object visitUnaryExpression(Unary expr) {
+  public Object visitUnaryExpr(Unary expr) {
     Object right = evaluate(expr.right);
     switch (expr.operator.type) {
       case BANG:
@@ -137,5 +150,18 @@ public class Interpreter implements Expr.Visitor<Object> {
       return;
     }
     throw new RuntimeError(operator, "Operands must be numbers.");
+  }
+
+  @Override
+  public Void visitExpressionStmt(Expression stmt) {
+    evaluate(stmt.expression);
+    return null;
+  }
+
+  @Override
+  public Void visitPrintStmt(Print stmt) {
+    Object value = evaluate(stmt.expression);
+    System.out.println(stringify(value));
+    return null;
   }
 }

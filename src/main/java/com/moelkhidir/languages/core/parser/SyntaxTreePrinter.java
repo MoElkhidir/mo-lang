@@ -26,23 +26,23 @@ public class SyntaxTreePrinter implements Expr.Visitor<String> {
   }
 
   @Override
-  public String visitBinaryExpression(Binary expr) {
+  public String visitBinaryExpr(Binary expr) {
     return parenthesize(expr.operator.lexeme,expr.left, expr.right);
   }
 
   @Override
-  public String visitGroupingExpression(Grouping expr) {
+  public String visitGroupingExpr(Grouping expr) {
     return parenthesize("group", expr.expr);
   }
 
   @Override
-  public String visitLiteralExpression(Literal expr) {
+  public String visitLiteralExpr(Literal expr) {
     if (expr.value == null) return "nil";
     return expr.value.toString();
   }
 
   @Override
-  public String visitUnaryExpression(Unary expr) {
+  public String visitUnaryExpr(Unary expr) {
     return parenthesize(expr.operator.lexeme, expr.right);
 
   }

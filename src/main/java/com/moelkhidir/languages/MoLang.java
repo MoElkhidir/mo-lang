@@ -7,6 +7,7 @@ import com.moelkhidir.languages.core.Token;
 import com.moelkhidir.languages.core.TokenType;
 import com.moelkhidir.languages.core.parser.Expr;
 import com.moelkhidir.languages.core.parser.Parser;
+import com.moelkhidir.languages.core.parser.Stmt;
 import com.moelkhidir.languages.core.parser.SyntaxTreePrinter;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,13 +62,13 @@ public class MoLang {
     Scanner scanner = new Scanner(source);
     List<Token> tokens = scanner.scanTokens();
     Parser parser = new Parser(tokens);
-    Expr expression = parser.parse();
-    // Stop if there was a syntax error.
+    List<Stmt> statements = parser.parse();    // Stop if there was a syntax error.
+
     if (hadError) {
       return;
     }
-    System.out.println(new SyntaxTreePrinter().print(expression));
-    interpreter.interpret(expression);
+
+    interpreter.interpret(statements);
   }
 
   public static void error(int line, String message) {

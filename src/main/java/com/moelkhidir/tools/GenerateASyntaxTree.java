@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GenerateASyntaxTree {
+
   public static void main(String[] args) throws IOException {
     if (args.length != 1) {
       System.err.println("Usage: generate_a_syntax_tree <output directory>");
@@ -14,12 +15,17 @@ public class GenerateASyntaxTree {
     String outputDir = args[0];
     defineAst(
         outputDir,
-        "Expression",
+        "Expr",
         Arrays.asList(
-            "Binary   : Expression left, Token operator, Expression right",
-            "Grouping : Expression expression",
+            "Binary   : Expr left, Token operator, Expr right",
+            "Grouping : Expr expr",
             "Literal  : Object value",
-            "Unary    : Token operator, Expression right"));
+            "Unary    : Token operator, Expr right"));
+
+    defineAst(outputDir, "Stmt", Arrays.asList(
+        "Expression : Expr expression",
+        "Print      : Expr expression"
+    ));
   }
 
   private static void defineAst(String outputDir, String baseName, List<String> types)
@@ -30,7 +36,7 @@ public class GenerateASyntaxTree {
     writer.println();
     writer.println("import java.util.List;");
     writer.println();
-    writer.println("abstract class " + baseName + " {");
+    writer.println("public abstract class " + baseName + " {");
 
     defineVisitor(writer, baseName, types);
 
@@ -43,7 +49,7 @@ public class GenerateASyntaxTree {
 
     // The base accept() method.
     writer.println();
-    writer.println("  abstract <R> R accept(Visitor<R> visitor);");
+    writer.println("  public abstract <R> R accept(Visitor<R> visitor);");
 
     writer.println("}");
     writer.close();
@@ -51,12 +57,12 @@ public class GenerateASyntaxTree {
 
   private static void defineType(
       PrintWriter writer, String baseName, String className, String fieldList) {
-    writer.println("  static class " + className + " extends " + baseName + " {");
+    writer.println("  public static class " + className + " extends " + baseName + " {");
     // Fields.
     String[] fields = fieldList.split(", ");
     writer.println();
     for (String field : fields) {
-      writer.println("    final " + field + ";");
+      writer.println("    public final " + field + ";");
     }
 
     // Constructor.
@@ -72,7 +78,7 @@ public class GenerateASyntaxTree {
     // Visitor pattern.
     writer.println();
     writer.println("    @Override");
-    writer.println("    <R> R accept(Visitor<R> visitor) {");
+    writer.println("    public <R> R accept(Visitor<R> visitor) {");
     writer.println("      return visitor.visit" +
         className + baseName + "(this);");
     writer.println("    }");
@@ -83,10 +89,10 @@ public class GenerateASyntaxTree {
 
   private static void defineVisitor(
       PrintWriter writer, String baseName, List<String> types) {
-    writer.println("  interface Visitor<R> {");
+    writer.println("  public interface Visitor<R> {");
     for (String type : types) {
       String typeName = type.split(":")[0].trim();
-      writer.println("    R visit" + typeName + baseName + "(" +
+      writer.println("    public R visit" + typeName + baseName + "(" +
           typeName + " " + baseName.toLowerCase() + ");");
     }
     writer.println("  }");

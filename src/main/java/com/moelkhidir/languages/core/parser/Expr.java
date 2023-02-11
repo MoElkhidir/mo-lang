@@ -1,26 +1,20 @@
 package com.moelkhidir.languages.core.parser;
 
 import com.moelkhidir.languages.core.Token;
+import java.util.List;
 
 public abstract class Expr {
-
   public interface Visitor<R> {
-
-    R visitBinaryExpression(Binary expr);
-
-    R visitGroupingExpression(Grouping expr);
-
-    R visitLiteralExpression(Literal expr);
-
-    R visitUnaryExpression(Unary expr);
+    public R visitBinaryExpr(Binary expr);
+    public R visitGroupingExpr(Grouping expr);
+    public R visitLiteralExpr(Literal expr);
+    public R visitUnaryExpr(Unary expr);
   }
-
   public static class Binary extends Expr {
 
     public final Expr left;
     public final Token operator;
     public final Expr right;
-
     Binary(Expr left, Token operator, Expr right) {
       this.left = left;
       this.operator = operator;
@@ -29,43 +23,37 @@ public abstract class Expr {
 
     @Override
     public <R> R accept(Visitor<R> visitor) {
-      return visitor.visitBinaryExpression(this);
+      return visitor.visitBinaryExpr(this);
     }
   }
-
   public static class Grouping extends Expr {
 
     public final Expr expr;
-
     Grouping(Expr expr) {
       this.expr = expr;
     }
 
     @Override
     public <R> R accept(Visitor<R> visitor) {
-      return visitor.visitGroupingExpression(this);
+      return visitor.visitGroupingExpr(this);
     }
   }
-
   public static class Literal extends Expr {
 
     public final Object value;
-
     Literal(Object value) {
       this.value = value;
     }
 
     @Override
     public <R> R accept(Visitor<R> visitor) {
-      return visitor.visitLiteralExpression(this);
+      return visitor.visitLiteralExpr(this);
     }
   }
-
   public static class Unary extends Expr {
 
     public final Token operator;
     public final Expr right;
-
     Unary(Token operator, Expr right) {
       this.operator = operator;
       this.right = right;
@@ -73,7 +61,7 @@ public abstract class Expr {
 
     @Override
     public <R> R accept(Visitor<R> visitor) {
-      return visitor.visitUnaryExpression(this);
+      return visitor.visitUnaryExpr(this);
     }
   }
 
