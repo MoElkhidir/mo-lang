@@ -1,11 +1,14 @@
 package com.moelkhidir.languages.core;
 
+import java.util.List;
+
 public abstract class Expr {
   public interface Visitor<R> {
     public R visitBinaryExpr(Binary expr);
     public R visitGroupingExpr(Grouping expr);
     public R visitLiteralExpr(Literal expr);
     public R visitUnaryExpr(Unary expr);
+    public R visitVariableExpr(Variable expr);
   }
   public static class Binary extends Expr {
 
@@ -59,6 +62,18 @@ public abstract class Expr {
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visitUnaryExpr(this);
+    }
+  }
+  public static class Variable extends Expr {
+
+    public final Token name;
+    Variable(Token name) {
+      this.name = name;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visitVariableExpr(this);
     }
   }
 

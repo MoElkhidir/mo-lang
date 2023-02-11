@@ -5,12 +5,14 @@ import com.moelkhidir.languages.core.Expr.Binary;
 import com.moelkhidir.languages.core.Expr.Grouping;
 import com.moelkhidir.languages.core.Expr.Literal;
 import com.moelkhidir.languages.core.Expr.Unary;
+import com.moelkhidir.languages.core.Expr.Variable;
 import com.moelkhidir.languages.core.Stmt.Expression;
 import com.moelkhidir.languages.core.Stmt.Print;
+import com.moelkhidir.languages.core.Stmt.Var;
 import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
-
+  private Environment environment = new Environment();
   public  void interpret(List<Stmt> statements) {
     try {
       for (Stmt statement : statements) {
@@ -107,6 +109,11 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     return null;
   }
 
+  @Override
+  public Object visitVariableExpr(Variable expr) {
+    return environment.get(expr.name);
+  }
+
   private boolean isEqual(Object a, Object b) {
     if (a == null && b == null) {
       return true;
@@ -156,6 +163,16 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   public Void visitPrintStmt(Print stmt) {
     Object value = evaluate(stmt.expression);
     System.out.println(stringify(value));
+    return null;
+  }
+
+  @Override
+  public Void visitVarStmt(Var stmt) {
+    Object value = null;
+    if (stmt.initializer != null) {
+      value = evaluate(stmt.initializer);
+    }
+    environment.define(stmt.name.lexeme, value);
     return null;
   }
 }

@@ -4,6 +4,7 @@ import com.moelkhidir.languages.core.Expr.Binary;
 import com.moelkhidir.languages.core.Expr.Grouping;
 import com.moelkhidir.languages.core.Expr.Literal;
 import com.moelkhidir.languages.core.Expr.Unary;
+import com.moelkhidir.languages.core.Expr.Variable;
 
 public class SyntaxTreePrinter implements Expr.Visitor<String> {
 
@@ -43,6 +44,11 @@ public class SyntaxTreePrinter implements Expr.Visitor<String> {
   public String visitUnaryExpr(Unary expr) {
     return parenthesize(expr.operator.lexeme, expr.right);
 
+  }
+
+  @Override
+  public String visitVariableExpr(Variable expr) {
+    return null;
   }
 
   private String parenthesize(String name, Expr... exprs) {

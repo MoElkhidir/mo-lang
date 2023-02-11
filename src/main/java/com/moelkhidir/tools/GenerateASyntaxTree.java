@@ -1,6 +1,8 @@
 package com.moelkhidir.tools;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
@@ -8,11 +10,15 @@ import java.util.List;
 public class GenerateASyntaxTree {
 
   public static void main(String[] args) throws IOException {
+    String outputDir = null;
     if (args.length != 1) {
-      System.err.println("Usage: generate_a_syntax_tree <output directory>");
-      System.exit(64);
+      InputStreamReader input = new InputStreamReader(System.in);
+      BufferedReader reader = new BufferedReader(input);
+      outputDir = reader.readLine();
+    } else {
+      outputDir = args[0];
     }
-    String outputDir = args[0];
+
     defineAst(
         outputDir,
         "Expr",
@@ -20,19 +26,26 @@ public class GenerateASyntaxTree {
             "Binary   : Expr left, Token operator, Expr right",
             "Grouping : Expr expr",
             "Literal  : Object value",
-            "Unary    : Token operator, Expr right"));
+            "Unary    : Token operator, Expr right",
+            "Variable : Token name"
+        )
+    );
 
-    defineAst(outputDir, "Stmt", Arrays.asList(
-        "Expression : Expr expression",
-        "Print      : Expr expression"
-    ));
+    defineAst(
+        outputDir,
+        "Stmt",
+        Arrays.asList(
+            "Expression : Expr expression",
+            "Print      : Expr expression",
+            "Var        : Token name, Expr initializer"
+        ));
   }
 
   private static void defineAst(String outputDir, String baseName, List<String> types)
       throws IOException {
     String path = outputDir + "/" + baseName + ".java";
     PrintWriter writer = new PrintWriter(path, "UTF-8");
-    writer.println("package com.moelkhidir.languages.core.parser;");
+    writer.println("package com.moelkhidir.languages.core;");
     writer.println();
     writer.println("import java.util.List;");
     writer.println();
