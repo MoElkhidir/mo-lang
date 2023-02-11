@@ -2,26 +2,26 @@ package com.moelkhidir.languages.core.parser;
 
 import com.moelkhidir.languages.core.Token;
 import com.moelkhidir.languages.core.TokenType;
-import com.moelkhidir.languages.core.parser.Expression.Binary;
-import com.moelkhidir.languages.core.parser.Expression.Grouping;
-import com.moelkhidir.languages.core.parser.Expression.Literal;
-import com.moelkhidir.languages.core.parser.Expression.Unary;
+import com.moelkhidir.languages.core.parser.Expr.Binary;
+import com.moelkhidir.languages.core.parser.Expr.Grouping;
+import com.moelkhidir.languages.core.parser.Expr.Literal;
+import com.moelkhidir.languages.core.parser.Expr.Unary;
 
-public class SyntaxTreePrinter implements Expression.Visitor<String> {
+public class SyntaxTreePrinter implements Expr.Visitor<String> {
 
   // just an example expression and how it gets printed
   public static void main(String[] args) {
-    Expression expression = new Expression.Binary(
-        new Expression.Unary(
+    Expr expr = new Expr.Binary(
+        new Expr.Unary(
             new Token(TokenType.MINUS, "-", null, 1),
-            new Expression.Literal(123)),
+            new Expr.Literal(123)),
         new Token(TokenType.STAR, "*", null, 1),
-        new Expression.Grouping(
-            new Expression.Literal(45.67)));
-    System.out.println(new SyntaxTreePrinter().print(expression));
+        new Expr.Grouping(
+            new Expr.Literal(45.67)));
+    System.out.println(new SyntaxTreePrinter().print(expr));
   }
 
-  String print(Expression expr) {
+  public String print(Expr expr) {
     return expr.accept(this);
   }
 
@@ -32,7 +32,7 @@ public class SyntaxTreePrinter implements Expression.Visitor<String> {
 
   @Override
   public String visitGroupingExpression(Grouping expression) {
-    return parenthesize("group", expression.expression);
+    return parenthesize("group", expression.expr);
   }
 
   @Override
@@ -47,10 +47,10 @@ public class SyntaxTreePrinter implements Expression.Visitor<String> {
 
   }
 
-  private String parenthesize(String name, Expression... exprs) {
+  private String parenthesize(String name, Expr... exprs) {
     StringBuilder builder = new StringBuilder();
     builder.append("(").append(name);
-    for (Expression expr : exprs) {
+    for (Expr expr : exprs) {
       builder.append(" ");
       builder.append(expr.accept(this));
     }

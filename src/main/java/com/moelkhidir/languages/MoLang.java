@@ -10,9 +10,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-/** Hello world! */
 public class MoLang {
+
   static boolean hadError = false;
+
   public static void main(String[] args) throws IOException {
     if (args.length > 1) {
       System.out.println("Usage: mo-lang [script]");
@@ -27,7 +28,9 @@ public class MoLang {
   private static void runFile(String path) throws IOException {
     byte[] bytes = Files.readAllBytes(Paths.get(path));
     run(new String(bytes, Charset.defaultCharset()));
-    if(hadError) System.exit(65);
+    if (hadError) {
+      System.exit(65);
+    }
   }
 
   private static void runPrompt() throws IOException {
@@ -36,7 +39,9 @@ public class MoLang {
     for (; ; ) {
       System.out.print("> ");
       String line = reader.readLine();
-      if (line == null) break;
+      if (line == null) {
+        break;
+      }
       run(line);
       hadError = false;
     }
@@ -46,7 +51,7 @@ public class MoLang {
     Scanner scanner = new Scanner(source);
     List<Token> tokens = scanner.scanTokens();
     // For now, just print the tokens.
-    for (Token token : tokens) {
+    Expr expression = parser.parse();
       System.out.println(token);
     }
   }

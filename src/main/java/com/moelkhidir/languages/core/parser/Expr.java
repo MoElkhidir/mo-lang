@@ -1,9 +1,8 @@
 package com.moelkhidir.languages.core.parser;
 
 import com.moelkhidir.languages.core.Token;
-import java.util.List;
 
-abstract class Expression {
+public abstract class Expr {
 
   interface Visitor<R> {
 
@@ -16,13 +15,13 @@ abstract class Expression {
     R visitUnaryExpression(Unary expression);
   }
 
-  static class Binary extends Expression {
+  static class Binary extends Expr {
 
-    final Expression left;
+    final Expr left;
     final Token operator;
-    final Expression right;
+    final Expr right;
 
-    Binary(Expression left, Token operator, Expression right) {
+    Binary(Expr left, Token operator, Expr right) {
       this.left = left;
       this.operator = operator;
       this.right = right;
@@ -34,12 +33,12 @@ abstract class Expression {
     }
   }
 
-  static class Grouping extends Expression {
+  static class Grouping extends Expr {
 
-    final Expression expression;
+    final Expr expr;
 
-    Grouping(Expression expression) {
-      this.expression = expression;
+    Grouping(Expr expr) {
+      this.expr = expr;
     }
 
     @Override
@@ -48,7 +47,7 @@ abstract class Expression {
     }
   }
 
-  static class Literal extends Expression {
+  static class Literal extends Expr {
 
     final Object value;
 
@@ -62,12 +61,12 @@ abstract class Expression {
     }
   }
 
-  static class Unary extends Expression {
+  static class Unary extends Expr {
 
     final Token operator;
-    final Expression right;
+    final Expr right;
 
-    Unary(Token operator, Expression right) {
+    Unary(Token operator, Expr right) {
       this.operator = operator;
       this.right = right;
     }
