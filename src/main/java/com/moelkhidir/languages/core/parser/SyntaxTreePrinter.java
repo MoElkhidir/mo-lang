@@ -9,7 +9,7 @@ import com.moelkhidir.languages.core.parser.Expr.Unary;
 
 public class SyntaxTreePrinter implements Expr.Visitor<String> {
 
-  // just an example expression and how it gets printed
+  // just an example expr and how it gets printed
   public static void main(String[] args) {
     Expr expr = new Expr.Binary(
         new Expr.Unary(
@@ -26,24 +26,24 @@ public class SyntaxTreePrinter implements Expr.Visitor<String> {
   }
 
   @Override
-  public String visitBinaryExpression(Binary expression) {
-    return parenthesize(expression.operator.lexeme,expression.left, expression.right);
+  public String visitBinaryExpression(Binary expr) {
+    return parenthesize(expr.operator.lexeme,expr.left, expr.right);
   }
 
   @Override
-  public String visitGroupingExpression(Grouping expression) {
-    return parenthesize("group", expression.expr);
+  public String visitGroupingExpression(Grouping expr) {
+    return parenthesize("group", expr.expr);
   }
 
   @Override
-  public String visitLiteralExpression(Literal expression) {
-    if (expression.value == null) return "nil";
-    return expression.value.toString();
+  public String visitLiteralExpression(Literal expr) {
+    if (expr.value == null) return "nil";
+    return expr.value.toString();
   }
 
   @Override
-  public String visitUnaryExpression(Unary expression) {
-    return parenthesize(expression.operator.lexeme, expression.right);
+  public String visitUnaryExpression(Unary expr) {
+    return parenthesize(expr.operator.lexeme, expr.right);
 
   }
 
