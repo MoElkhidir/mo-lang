@@ -2,6 +2,10 @@ package com.moelkhidir.languages;
 
 import com.moelkhidir.languages.core.Scanner;
 import com.moelkhidir.languages.core.Token;
+import com.moelkhidir.languages.core.TokenType;
+import com.moelkhidir.languages.core.parser.Expr;
+import com.moelkhidir.languages.core.parser.Parser;
+import com.moelkhidir.languages.core.parser.SyntaxTreePrinter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -50,15 +54,25 @@ public class MoLang {
   private static void run(String source) {
     Scanner scanner = new Scanner(source);
     List<Token> tokens = scanner.scanTokens();
-    // For now, just print the tokens.
+    Parser parser = new Parser(tokens);
     Expr expression = parser.parse();
-      System.out.println(token);
-    }
+    // Stop if there was a syntax error.
+    if (hadError) return;
+    System.out.println(new SyntaxTreePrinter().print(expression));
   }
 
   public static void error(int line, String message) {
     report(line, "", message);
   }
+
+  public static void error(Token token, String message) {
+    if (token.type == TokenType.EOF) {
+      report(token.line, " at end", message);
+    } else {
+      report(token.line, " at '" + token.lexeme + "'", message);
+    }
+  }
+
   private static void report(int line, String where,
       String message) {
     System.err.println(
