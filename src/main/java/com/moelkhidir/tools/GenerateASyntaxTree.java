@@ -10,19 +10,20 @@ import java.util.List;
 public class GenerateASyntaxTree {
 
   public static void main(String[] args) throws IOException {
-    String outputDir = null;
-    if (args.length != 1) {
-      InputStreamReader input = new InputStreamReader(System.in);
-      BufferedReader reader = new BufferedReader(input);
-      outputDir = reader.readLine();
-    } else {
-      outputDir = args[0];
-    }
+    String outputDir = "src/main/java/com/moelkhidir/languages/core";
+//    if (args.length != 1) {
+//      InputStreamReader input = new InputStreamReader(System.in);
+//      BufferedReader reader = new BufferedReader(input);
+//      outputDir = reader.readLine();
+//    } else {
+//      outputDir = args[0];
+//    }
 
     defineAst(
         outputDir,
         "Expr",
         Arrays.asList(
+            "Assign   : Token name, Expr value",
             "Binary   : Expr left, Token operator, Expr right",
             "Grouping : Expr expr",
             "Literal  : Object value",

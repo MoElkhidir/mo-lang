@@ -1,5 +1,6 @@
 package com.moelkhidir.languages.core;
 
+import com.moelkhidir.languages.core.Expr.Assign;
 import com.moelkhidir.languages.core.Expr.Binary;
 import com.moelkhidir.languages.core.Expr.Grouping;
 import com.moelkhidir.languages.core.Expr.Literal;
@@ -22,6 +23,11 @@ public class SyntaxTreePrinter implements Expr.Visitor<String> {
 
   public String print(Expr expr) {
     return expr.accept(this);
+  }
+
+  @Override
+  public String visitAssignExpr(Assign expr) {
+    return null;
   }
 
   @Override
