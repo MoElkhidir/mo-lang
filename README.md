@@ -6,6 +6,8 @@
 2. Expression parsing.
 3. Statement parsing.
 4. Evaluating statements (currently only print and expression statements.)
+5. Global variable management.
+6. Scoped variable management.
 
 
 ## How to run your first program:
