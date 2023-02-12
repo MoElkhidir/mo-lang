@@ -7,14 +7,17 @@ import com.moelkhidir.languages.core.Expr.Grouping;
 import com.moelkhidir.languages.core.Expr.Literal;
 import com.moelkhidir.languages.core.Expr.Unary;
 import com.moelkhidir.languages.core.Expr.Variable;
+import com.moelkhidir.languages.core.Stmt.Block;
 import com.moelkhidir.languages.core.Stmt.Expression;
 import com.moelkhidir.languages.core.Stmt.Print;
 import com.moelkhidir.languages.core.Stmt.Var;
 import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
+
   private Environment environment = new Environment();
-  public  void interpret(List<Stmt> statements) {
+
+  public void interpret(List<Stmt> statements) {
     try {
       for (Stmt statement : statements) {
         execute(statement);
@@ -159,6 +162,24 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
       return;
     }
     throw new RuntimeError(operator, "Operands must be numbers.");
+  }
+
+  @Override
+  public Void visitBlockStmt(Block stmt) {
+    executeBlock(stmt.statements, new Environment(environment));
+    return null;
+  }
+
+  void executeBlock(List<Stmt> statements, Environment environment) {
+    Environment previous = this.environment;
+    try {
+      this.environment = environment;
+      for (Stmt statement : statements) {
+        execute(statement);
+      }
+    } finally {
+      this.environment = previous;
+    }
   }
 
   @Override
