@@ -1,5 +1,6 @@
 package com.moelkhidir.languages;
 
+import com.moelkhidir.languages.core.REPLInterpreter;
 import com.moelkhidir.languages.core.RuntimeError;
 import com.moelkhidir.languages.core.Interpreter;
 import com.moelkhidir.languages.core.Scanner;
@@ -61,12 +62,12 @@ public class MoLang {
     List<Token> tokens = scanner.scanTokens();
     Parser parser = new Parser(tokens);
     List<Stmt> statements = parser.parse();    // Stop if there was a syntax error.
-
+    Interpreter REPLInterpreter = new REPLInterpreter();
     if (hadError) {
       return;
     }
 
-    interpreter.interpret(statements);
+    REPLInterpreter.interpret(statements);
   }
 
   public static void error(int line, String message) {

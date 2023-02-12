@@ -31,7 +31,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     stmt.accept(this);
   }
 
-  private String stringify(Object object) {
+  String stringify(Object object) {
     if (object == null) {
       return "nil";
     }
@@ -135,7 +135,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     return a.equals(b);
   }
 
-  private Object evaluate(Expr expr) {
+  Object evaluate(Expr expr) {
     return expr.accept(this);
   }
 
