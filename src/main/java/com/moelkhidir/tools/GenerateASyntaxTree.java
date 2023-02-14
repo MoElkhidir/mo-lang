@@ -27,6 +27,7 @@ public class GenerateASyntaxTree {
             "Binary   : Expr left, Token operator, Expr right",
             "Grouping : Expr expr",
             "Literal  : Object value",
+            "Logical  : Expr left, Token operator, Expr right",
             "Unary    : Token operator, Expr right",
             "Variable : Token name"
         )
@@ -38,6 +39,7 @@ public class GenerateASyntaxTree {
         Arrays.asList(
             "Block      : List<Stmt> statements",
             "Expression : Expr expression",
+            "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",
             "Print      : Expr expression",
             "Var        : Token name, Expr initializer"
         ));

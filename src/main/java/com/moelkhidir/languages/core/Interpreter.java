@@ -5,10 +5,12 @@ import com.moelkhidir.languages.core.Expr.Assign;
 import com.moelkhidir.languages.core.Expr.Binary;
 import com.moelkhidir.languages.core.Expr.Grouping;
 import com.moelkhidir.languages.core.Expr.Literal;
+import com.moelkhidir.languages.core.Expr.Logical;
 import com.moelkhidir.languages.core.Expr.Unary;
 import com.moelkhidir.languages.core.Expr.Variable;
 import com.moelkhidir.languages.core.Stmt.Block;
 import com.moelkhidir.languages.core.Stmt.Expression;
+import com.moelkhidir.languages.core.Stmt.If;
 import com.moelkhidir.languages.core.Stmt.Print;
 import com.moelkhidir.languages.core.Stmt.Var;
 import java.util.List;
@@ -107,6 +109,17 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   }
 
   @Override
+  public Object visitLogicalExpr(Logical expr) {
+    Object left = evaluate(expr.left);
+    if (expr.operator.type == TokenType.OR) {
+      if (isTruthy(left)) return left;
+    } else {
+      if (!isTruthy(left)) return left;
+    }
+    return evaluate(expr.right);
+  }
+
+  @Override
   public Object visitUnaryExpr(Unary expr) {
     Object right = evaluate(expr.right);
     switch (expr.operator.type) {
@@ -185,6 +198,16 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   @Override
   public Void visitExpressionStmt(Expression stmt) {
     evaluate(stmt.expression);
+    return null;
+  }
+
+  @Override
+  public Void visitIfStmt(If stmt) {
+    if (isTruthy(evaluate(stmt.condition))) {
+      execute(stmt.thenBranch);
+    } else if (stmt.elseBranch != null) {
+      execute(stmt.elseBranch);
+    }
     return null;
   }
 

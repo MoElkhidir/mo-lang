@@ -4,6 +4,7 @@ import com.moelkhidir.languages.core.Expr.Assign;
 import com.moelkhidir.languages.core.Expr.Binary;
 import com.moelkhidir.languages.core.Expr.Grouping;
 import com.moelkhidir.languages.core.Expr.Literal;
+import com.moelkhidir.languages.core.Expr.Logical;
 import com.moelkhidir.languages.core.Expr.Unary;
 import com.moelkhidir.languages.core.Expr.Variable;
 
@@ -44,6 +45,11 @@ public class SyntaxTreePrinter implements Expr.Visitor<String> {
   public String visitLiteralExpr(Literal expr) {
     if (expr.value == null) return "nil";
     return expr.value.toString();
+  }
+
+  @Override
+  public String visitLogicalExpr(Logical expr) {
+    return null;
   }
 
   @Override
