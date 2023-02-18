@@ -13,6 +13,7 @@ import com.moelkhidir.languages.core.Stmt.Expression;
 import com.moelkhidir.languages.core.Stmt.If;
 import com.moelkhidir.languages.core.Stmt.Print;
 import com.moelkhidir.languages.core.Stmt.Var;
+import com.moelkhidir.languages.core.Stmt.While;
 import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
@@ -225,6 +226,14 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
       value = evaluate(stmt.initializer);
     }
     environment.define(stmt.name.lexeme, value);
+    return null;
+  }
+
+  @Override
+  public Void visitWhileStmt(While stmt) {
+    while (isTruthy(evaluate(stmt.condition))) {
+      execute(stmt.body);
+    }
     return null;
   }
 }

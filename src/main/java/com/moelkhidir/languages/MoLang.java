@@ -34,7 +34,8 @@ public class MoLang {
 
   private static void runFile(String path) throws IOException {
     byte[] bytes = Files.readAllBytes(Paths.get(path));
-    run(new String(bytes, Charset.defaultCharset()));
+    Interpreter interpreter = new Interpreter();
+    run(new String(bytes, Charset.defaultCharset()), interpreter);
     if (hadError) {
       System.exit(65);
     }
@@ -46,28 +47,28 @@ public class MoLang {
   private static void runPrompt() throws IOException {
     InputStreamReader input = new InputStreamReader(System.in);
     BufferedReader reader = new BufferedReader(input);
+    Interpreter REPLInterpreter = new REPLInterpreter();
     for (; ; ) {
       System.out.print("> ");
       String line = reader.readLine();
       if (line == null) {
         break;
       }
-      run(line);
+      run(line, REPLInterpreter);
       hadError = false;
     }
   }
 
-  private static void run(String source) {
+  private static void run(String source, Interpreter interpreter) {
     Scanner scanner = new Scanner(source);
     List<Token> tokens = scanner.scanTokens();
     Parser parser = new Parser(tokens);
     List<Stmt> statements = parser.parse();    // Stop if there was a syntax error.
-    Interpreter REPLInterpreter = new REPLInterpreter();
     if (hadError) {
       return;
     }
 
-    REPLInterpreter.interpret(statements);
+    interpreter.interpret(statements);
   }
 
   public static void error(int line, String message) {
