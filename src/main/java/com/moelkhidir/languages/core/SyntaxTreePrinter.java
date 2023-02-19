@@ -2,6 +2,7 @@ package com.moelkhidir.languages.core;
 
 import com.moelkhidir.languages.core.Expr.Assign;
 import com.moelkhidir.languages.core.Expr.Binary;
+import com.moelkhidir.languages.core.Expr.Call;
 import com.moelkhidir.languages.core.Expr.Grouping;
 import com.moelkhidir.languages.core.Expr.Literal;
 import com.moelkhidir.languages.core.Expr.Logical;
@@ -34,6 +35,11 @@ public class SyntaxTreePrinter implements Expr.Visitor<String> {
   @Override
   public String visitBinaryExpr(Binary expr) {
     return parenthesize(expr.operator.lexeme,expr.left, expr.right);
+  }
+
+  @Override
+  public String visitCallExpr(Call expr) {
+    return null;
   }
 
   @Override

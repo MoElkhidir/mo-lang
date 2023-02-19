@@ -3,6 +3,7 @@ package com.moelkhidir.languages.core;
 import com.moelkhidir.languages.MoLang;
 import com.moelkhidir.languages.core.Expr.Assign;
 import com.moelkhidir.languages.core.Expr.Binary;
+import com.moelkhidir.languages.core.Expr.Call;
 import com.moelkhidir.languages.core.Expr.Grouping;
 import com.moelkhidir.languages.core.Expr.Literal;
 import com.moelkhidir.languages.core.Expr.Logical;
@@ -10,15 +11,31 @@ import com.moelkhidir.languages.core.Expr.Unary;
 import com.moelkhidir.languages.core.Expr.Variable;
 import com.moelkhidir.languages.core.Stmt.Block;
 import com.moelkhidir.languages.core.Stmt.Expression;
+import com.moelkhidir.languages.core.Stmt.Function;
 import com.moelkhidir.languages.core.Stmt.If;
 import com.moelkhidir.languages.core.Stmt.Print;
 import com.moelkhidir.languages.core.Stmt.Var;
 import com.moelkhidir.languages.core.Stmt.While;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
+  final Environment globals = new Environment();
+  private Environment environment = globals;
 
-  private Environment environment = new Environment();
+  public Interpreter() {
+    globals.define("clock", new MoLangCallable() {
+      @Override
+      public int arity() { return 0; }
+      @Override
+      public Object call(Interpreter interpreter, List<Object> arguments) {
+        return (double)System.currentTimeMillis() / 1000.0;
+      }
+
+      @Override
+      public String toString() { return "<native fn>"; }
+    });
+  }
 
   public void interpret(List<Stmt> statements) {
     try {
@@ -100,6 +117,32 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   }
 
   @Override
+  public Object visitCallExpr(Call expr) {
+    Object callee = evaluate(expr.callee);
+    List<Object> arguments = new ArrayList<>();
+    for (Expr argument : expr.arguments) {
+      arguments.add(evaluate(argument));
+    }
+
+    // making sure that the callee is actually a callable thing
+    if (!(callee instanceof MoLangCallable)) {
+      throw new RuntimeError(expr.paren,
+          "Can only call functions and classes.");
+    }
+
+    MoLangCallable function = (MoLangCallable) callee;
+
+    // verifying that the arguments passed matches the arguments length
+    // in function definition
+    if (arguments.size() != function.arity()) {
+      throw new RuntimeError(expr.paren, "Expected " +
+          function.arity() + " arguments but got " +
+          arguments.size() + ".");
+    }
+    return function.call(this, arguments);
+  }
+
+  @Override
   public Object visitGroupingExpr(Grouping expr) {
     return evaluate(expr.expr);
   }
@@ -113,9 +156,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   public Object visitLogicalExpr(Logical expr) {
     Object left = evaluate(expr.left);
     if (expr.operator.type == TokenType.OR) {
-      if (isTruthy(left)) return left;
+      if (isTruthy(left)) {
+        return left;
+      }
     } else {
-      if (!isTruthy(left)) return left;
+      if (!isTruthy(left)) {
+        return left;
+      }
     }
     return evaluate(expr.right);
   }
@@ -199,6 +246,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
   @Override
   public Void visitExpressionStmt(Expression stmt) {
     evaluate(stmt.expression);
+    return null;
+  }
+
+  @Override
+  public Void visitFunctionStmt(Function stmt) {
+    MoLangFunction function = new MoLangFunction(stmt);
+    environment.define(stmt.name.lexeme, function);
     return null;
   }
 
